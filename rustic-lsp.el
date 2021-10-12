@@ -78,7 +78,8 @@ then you must set this to nil before loading `rustic-lsp'."
 with `lsp-rust-switch-server'."
   (require 'lsp-rust)
   (require 'lsp-modeline)
-  (lsp-workspace-folders-add (rustic-buffer-workspace))
+  ;; TODO: Do we still need this ? Seems to break stuff
+  ;; (lsp-workspace-folders-add (rustic-buffer-workspace))
   (setq lsp-rust-server rustic-lsp-server)
   (setq lsp-rust-analyzer-server-command rustic-analyzer-command)
   (lsp-rust-switch-server rustic-lsp-server))
