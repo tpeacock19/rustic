@@ -227,11 +227,19 @@ Otherwise create it with `rustic-babel-generate-project'."
   "Generate the [dependencies] section of a Cargo.toml file given crates and their versions & features."
   (let ((dependencies ""))
     (dolist (crate-and-version crate-versions)
-      (let* ((name (car crate-and-version))
-             (version (cdr crate-and-version))
+      (let* (name
+             version
              (features (cdr (assoc name crate-features)))
              (path (cdr (assoc name crate-paths))))
-        (setq name (symbol-name name))
+        (setq name (if (listp crate-and-version)
+                       (car crate-and-version)
+                     crate-and-version))
+        (setq version
+              (if (listp crate-and-version)
+                  (cdr crate-and-version)
+                "*"))
+        (when (symbolp name)
+          (setq name (symbol-name name)))
         (when (numberp version)
           (setq version (number-to-string version)))
         (when (not (listp features))
