@@ -206,9 +206,12 @@ it doesn't manage to find what you're looking for, try `rustic-doc-dumb-search'.
 
 (defun rustic-doc--update-current-project ()
   "Update `rustic-doc-current-project' if editing a rust file, otherwise leave it."
-  (when (and (featurep  'lsp-mode)
-             (derived-mode-p 'rust-mode 'rustic-mode))
-    (setq rustic-doc-current-project (lsp-workspace-root))))
+  (when (derived-mode-p 'rust-mode 'rustic-mode)
+    (cond
+     ((featurep  'lsp-mode)
+      (setq rustic-doc-current-project (lsp-workspace-root)))
+     ((featurep 'eglot)
+      (setq rustic-doc-current-project (expand-file-name (nth 2 (eglot--current-project))))))))
 
 (defun rustic-doc--deepest-dir (path)
   "Find the deepest existing and non-empty arg-directory parent of PATH.
